@@ -25,10 +25,27 @@ class WeatherDashboard:
     def create_bucket_if_not_exists(self):
         """Create S3 bucket if it doesn't exist."""
         try:
+            # Try to head the bucket to check if it exists
             self.s3_client.head_bucket(Bucket=self.bucket_name)
             print(f"Bucket '{self.bucket_name}' already exists.")
         except self.s3_client.exceptions.NoSuchBucket:
             print(f"Bucket '{self.bucket_name}' does not exist. Creating it...")
+            self._create_bucket()
+        except self.s3_client.exceptions.ClientError as e:
+            # Check for 404 specifically or any other client error
+            if e.response['Error']['Code'] == '404':
+                print(f"Bucket '{self.bucket_name}' does not exist. Creating it...")
+                self._create_bucket()
+            else:
+                print(f"Unexpected error occurred: {e}")
+                raise
+        except Exception as e:
+            print(f"Error checking/creating bucket: {e}")
+            raise
+
+    def _create_bucket(self):
+        """Helper method to create the S3 bucket."""
+        try:
             if self.region == 'us-east-1':
                 self.s3_client.create_bucket(Bucket=self.bucket_name)
             else:
@@ -38,7 +55,7 @@ class WeatherDashboard:
                 )
             print(f"Successfully created bucket '{self.bucket_name}'.")
         except Exception as e:
-            print(f"Error checking/creating bucket: {e}")
+            print(f"Error creating bucket: {e}")
             raise
 
     async def fetch_weather(self, session, city):
@@ -118,30 +135,30 @@ class WeatherDashboard:
         plt.show()
         
     def upload_static_files(self):
-    """Upload static website files to the root of the S3 bucket."""
-    static_files = {
-        'app.js': 'application/javascript',
-        'index.html': 'text/html',
-        'style.css': 'text/css'
-    }
+        """Upload static website files to the root of the S3 bucket."""
+        static_files = {
+            'app.js': 'application/javascript',
+            'index.html': 'text/html',
+            'style.css': 'text/css'
+        }
 
-    for file_name, content_type in static_files.items():
-        file_path = os.path.join('static_website', file_name)
-        if not os.path.exists(file_path):
-            print(f"File {file_name} not found in the static_website directory.")
-            continue
+        for file_name, content_type in static_files.items():
+            file_path = os.path.join('static_website', file_name)
+            if not os.path.exists(file_path):
+                print(f"File {file_name} not found in the static_website directory.")
+                continue
 
-        try:
-            with open(file_path, 'rb') as file:
-                self.s3_client.put_object(
-                    Bucket=self.bucket_name,
-                    Key=file_name,
-                    Body=file,
-                    ContentType=content_type
-                )
-                print(f"Successfully uploaded {file_name} to S3.")
-        except Exception as e:
-            print(f"Error uploading {file_name} to S3: {e}")    
+            try:
+                with open(file_path, 'rb') as file:
+                    self.s3_client.put_object(
+                        Bucket=self.bucket_name,
+                        Key=file_name,
+                        Body=file,
+                        ContentType=content_type
+                    )
+                    print(f"Successfully uploaded {file_name} to S3.")
+            except Exception as e:
+                print(f"Error uploading {file_name} to S3: {e}")    
     
 
 def main():
