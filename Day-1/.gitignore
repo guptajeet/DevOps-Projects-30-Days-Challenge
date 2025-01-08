@@ -1,0 +1,39 @@
+# Python Bytecode
+__pycache__/
+*.py[cod]
+
+# Environment Variables
+.env
+
+# AWS Credentials
+.aws/
+
+# VSCode settings
+.vscode/
+
+# IDE and editor directories
+.idea/
+
+# Logs
+*.log
+
+# Temporary files
+*.bak
+*.swp
+*.tmp
+
+# MacOS specific
+.DS_Store
+
+# Windows specific
+Thumbs.db
+
+# Python virtual environment
+venv/
+env/
+
+# Package distribution
+*.egg
+*.egg-info
+dist/
+build/

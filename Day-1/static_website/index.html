@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Weather Dashboard</h1>
+    <form id="search-form">
+        <input type="text" id="city-input" placeholder="Enter city name">
+        <button type="submit">Search</button>
+    </form>
+    <div id="default-cities">
+        <h2>Default Cities</h2>
+        <canvas id="default-chart"></canvas>
+    </div>
+    <div id="search-results">
+        <h2>Search Results</h2>
+        <canvas id="search-chart"></canvas>
+    </div>
+    <div id="historical-data">
+        <h2>Historical Data</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>City</th>
+                    <th>Date</th>
+                    <th>Temperature (°F)</th>
+                </tr>
+            </thead>
+            <tbody id="historical-table">
+            </tbody>
+        </table>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
