@@ -156,7 +156,7 @@ function displayHistoricalData(data) {
 fetchHistoricalData();
 
 */
-
+/*
 document.getElementById("search-form").addEventListener("submit", async (event) => {
     event.preventDefault(); // Prevent form from submitting and refreshing the page
     const city = document.getElementById("city-input").value;
@@ -164,7 +164,7 @@ document.getElementById("search-form").addEventListener("submit", async (event) 
 
     try {
         // Fetch weather data for the city from API Gateway
-        const response = await fetch('https://svmdjm2kzj.execute-api.us-east-1.amazonaws.com/weather', {
+        const response = await fetch('https://yourapi.execute-api.us-east-1.amazonaws.com/weather', {
             method: "POST", // POST method for Lambda function
             headers: {
                 "Content-Type": "application/json"
@@ -213,13 +213,13 @@ function updateSearchResults(data) {
 // Function to fetch and display historical data
 async function fetchHistoricalData() {
     try {
-        const response = await fetch('https://weatherdashboard-bucket-123456789.s3.amazonaws.com/weather-data/index.json');
+        const response = await fetch('https://yourbucket.s3.amazonaws.com/weather-data/index.json');
         const data = await response.json();
 
         if (response.ok) {
             // Loop through each entry in the index.json file and fetch the corresponding city weather data
             for (const entry of data) {
-                const weatherResponse = await fetch(`https://weatherdashboard-bucket-123456789.s3.amazonaws.com/${entry.file_name}`);
+                const weatherResponse = await fetch(`https://yourbucket.s3.amazonaws.com/${entry.file_name}`);
                 const weatherData = await weatherResponse.json();
 
                 if (weatherResponse.ok) {
@@ -263,12 +263,253 @@ function displayHistoricalData(entry) {
 
 // Fetch historical data when the page loads
 fetchHistoricalData();
+\*
+document.addEventListener('DOMContentLoaded', () => {
+    const searchForm = document.getElementById('search-form');
+    const cityInput = document.getElementById('city-input');
+    const weatherInfo = document.getElementById('weather-info');
+    const historicalTable = document.getElementById('historical-table');
+    let searchChart;
+    let historicalChart;
 
+    searchForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const city = cityInput.value.trim();
+        if (city) {
+            try {
+                const weatherData = await fetchWeatherData(city);
+                displayCurrentWeather(weatherData);
+                updateSearchChart(weatherData);
+                await fetchAndDisplayHistoricalData();
+            } catch (error) {
+                console.error('Error:', error);
+                displayError('Failed to fetch weather data. Please try again.');
+            }
+        }
+    });
 
+    async function fetchWeatherData(city) {
+        try {
+            const response = await fetch('https://y8ehuk3u3l.execute-api.us-east-1.amazonaws.com/weather', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ city: city })
+            });
 
+            if (!response.ok) {
+                const errorData = await response.text();
+                throw new Error(errorData || `HTTP error! status: ${response.status}`);
+            }
 
+            return await response.json();
+        } catch (error) {
+            console.error('Fetch error:', error);
+            throw error;
+        }
+    }
 
+    function displayCurrentWeather(data) {
+        weatherInfo.innerHTML = `
+            <div class="weather-card">
+                <h3>${data.city}</h3>
+                <p><i class="fas fa-thermometer-half"></i> ${data.temperature.toFixed(1)}°C</p>
+                <p><i class="fas fa-tint"></i> ${data.humidity}%</p>
+                <p><i class="fas fa-cloud"></i> ${data.conditions}</p>
+                <p><i class="fas fa-wind"></i> ${data.wind_speed} m/s</p>
+            </div>
+        `;
+    }
 
+    function updateSearchChart(data) {
+        const ctx = document.getElementById('search-chart').getContext('2d');
 
+        if (searchChart) {
+            searchChart.destroy();
+        }
 
+        searchChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Temperature (°C)', 'Humidity (%)', 'Wind Speed (m/s)'],
+                datasets: [{
+                    label: data.city,
+                    data: [data.temperature, data.humidity, data.wind_speed],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y.toFixed(2);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    async function fetchAndDisplayHistoricalData() {
+        try {
+            const response = await fetch('https://weatherdashboard-bucket-123456789.s3.amazonaws.com/weather-data/index.json', {
+                mode: 'cors'
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            const historicalData = [];
+
+            historicalTable.innerHTML = '';
+
+            for (const entry of data.slice(-5)) { // Display only the last 5 entries
+                try {
+                    const weatherResponse = await fetch(`https://weatherdashboard-bucket-123456789.s3.amazonaws.com/${entry.file_name}`, {
+                        mode: 'cors'
+                    });
+
+                    if (!weatherResponse.ok) {
+                        throw new Error(`HTTP error! status: ${weatherResponse.status}`);
+                    }
+
+                    const weatherData = await weatherResponse.json();
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${weatherData.name}</td>
+                        <td>${formatTimestamp(entry.timestamp)}</td>
+                        <td>${weatherData.main.temp.toFixed(2)}°C</td>
+                    `;
+                    historicalTable.appendChild(row);
+
+                    historicalData.push({
+                        city: weatherData.name,
+                        timestamp: formatTimestamp(entry.timestamp),
+                        temperature: weatherData.main.temp
+                    });
+                } catch (error) {
+                    console.error(`Error fetching data for ${entry.city}:`, error);
+                }
+            }
+
+            updateHistoricalChart(historicalData);
+        } catch (error) {
+            console.error('Error fetching historical data:', error);
+            displayError('Failed to fetch historical data. Please try again later.');
+        }
+    }
+
+    function updateHistoricalChart(data) {
+        const ctx = document.getElementById('historical-chart').getContext('2d');
+
+        if (historicalChart) {
+            historicalChart.destroy();
+        }
+
+        historicalChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data.map(entry => entry.timestamp),
+                datasets: data.map(entry => ({
+                    label: entry.city,
+                    data: [entry.temperature],
+                    borderColor: getRandomColor(),
+                    fill: false
+                }))
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        type: 'category',
+                        labels: data.map(entry => entry.timestamp)
+                    },
+                    y: {
+                        beginAtZero: false,
+                        title: {
+                            display: true,
+                            text: 'Temperature (°C)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y.toFixed(2) + '°C';
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function formatTimestamp(timestamp) {
+        const year = timestamp.slice(0, 4);
+        const month = timestamp.slice(4, 6);
+        const day = timestamp.slice(6, 8);
+        const hour = timestamp.slice(9, 11);
+        const minute = timestamp.slice(11, 13);
+        return `${year}-${month}-${day} ${hour}:${minute}`;
+    }
+
+    function getRandomColor() {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+    function displayError(message) {
+        weatherInfo.innerHTML = `<p class="error">${message}</p>`;
+    }
+
+    // Fetch historical data on page load
+    fetchAndDisplayHistoricalData();
+});
 

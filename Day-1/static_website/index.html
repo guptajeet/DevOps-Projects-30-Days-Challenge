@@ -3,40 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather Dashboard</title>
+    <title>Interactive Weather Dashboard</title>
     <link rel="stylesheet" href="style.css">
-    
-    <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <h1>Weather Dashboard</h1>
-    <form id="search-form">
-        <input type="text" id="city-input" placeholder="Enter city name">
-        <button type="submit">Search</button>
-    </form>
-    <div id="default-cities">
-        <h2>Default Cities</h2>
-        <canvas id="default-chart"></canvas>
-    </div>
-    <div id="search-results">
-        <h2>Search Results</h2>
-        <canvas id="search-chart"></canvas>
-    </div>
-    <div id="historical-data">
-        <h2>Historical Data</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>City</th>
-                    <th>Date</th>
-                    <th>Temperature (°F)</th>
-                </tr>
-            </thead>
-            <tbody id="historical-table">
-            </tbody>
-        </table>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-cloud-sun"></i> Interactive Weather Dashboard</h1>
+        </header>
+        <main>
+            <section id="search-section">
+                <form id="search-form">
+                    <input type="text" id="city-input" placeholder="Enter city name" aria-label="Enter city name">
+                    <button type="submit"><i class="fas fa-search"></i> Search</button>
+                </form>
+            </section>
+            <section id="current-weather">
+                <h2>Current Weather</h2>
+                <div id="weather-info" class="card"></div>
+            </section>
+            <section id="search-results">
+                <h2>Search Results</h2>
+                <div class="card">
+                    <canvas id="search-chart"></canvas>
+                </div>
+            </section>
+            <section id="historical-data">
+                <h2>Historical Data</h2>
+                <div class="card">
+                    <canvas id="historical-chart"></canvas>
+                </div>
+                <div class="card table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>City</th>
+                                <th>Date</th>
+                                <th>Temperature (°F)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historical-table"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+        <footer>
+            <p>&copy; 2023 Interactive Weather Dashboard. All rights reserved.</p>
+        </footer>
     </div>
     <script src="app.js"></script>
 </body>
 </html>
+
