@@ -29,6 +29,8 @@ As a DevOps learner, this project showcases the integration of various technolog
 
 Whether you're a weather enthusiast or a budding DevOps engineer, this project provides valuable insights into creating a functional, cloud-integrated application.
 
+![alt text](image-1.png)
+
 ## 🏗️ Project Structure
 
 The project is organized as follows:
@@ -104,6 +106,8 @@ To run the Weather Dashboard:
 
 3. Follow the prompts to enter city names or use the default cities.
 
+![alt text](image.png)
+
 ## 🧠 Code Explanation
 
 ### weather_dashboard.py
@@ -133,16 +137,6 @@ This is the heart of the application. Let's break down its key components:
 
 This utility script ensures that all necessary environment variables are properly set. It's crucial for maintaining the security and functionality of the application.
 
-## 🚀 Future Enhancements
-
-1. Implement a graphical user interface (GUI) for a more interactive experience.
-2. Add historical data analysis and visualization capabilities.
-3. Integrate with additional weather APIs for more comprehensive data.
-4. Implement user authentication for personalized experiences.
-5. Create a web application version with real-time updates.
-6. Add support for geolocation to automatically detect the user's city.
-7. Implement weather alerts and notifications.
-
 ## 🚨 Common Issues and Solutions
 
 During the development of this project, several challenges were encountered. Here are some common issues and their solutions:
@@ -162,6 +156,22 @@ During the development of this project, several challenges were encountered. Her
 4. **GitHub SSH Authentication**
    - Issue: Unable to push code to repository
    - Solution: Follow the SSH key setup guide in the prerequisites section
+
+## 🚀 Future Enhancements
+
+1. Implement a graphical user interface (GUI) for a more interactive experience.
+2. Add historical data analysis and visualization capabilities.
+3. Integrate with additional weather APIs for more comprehensive data.
+4. Implement user authentication for personalized experiences.
+5. Create a web application version with real-time updates.
+6. Add support for geolocation to automatically detect the user's city.
+7. Implement weather alerts and notifications.
+   
+   - Do checkout Branch 1 of same project i tried to make it more enhaced [day-1-branch](https://github.com/guptajeet/DevOps-Projects-30-Days-Challenge/tree/day-1-branch/Day-1)
+
+   - Below are some snips,
+![alt text](<Screenshot 2025-01-10 202847.jpg>)
+
 
 ## 🤝 Contributing
 
