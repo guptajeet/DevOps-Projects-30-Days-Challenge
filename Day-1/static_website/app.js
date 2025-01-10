@@ -156,7 +156,10 @@ function displayHistoricalData(data) {
 fetchHistoricalData();
 
 */
+
+
 /*
+
 document.getElementById("search-form").addEventListener("submit", async (event) => {
     event.preventDefault(); // Prevent form from submitting and refreshing the page
     const city = document.getElementById("city-input").value;
@@ -213,7 +216,7 @@ function updateSearchResults(data) {
 // Function to fetch and display historical data
 async function fetchHistoricalData() {
     try {
-        const response = await fetch('https://yourbucket.s3.amazonaws.com/weather-data/index.json');
+        const response = await fetch('https://ypurbucket.s3.amazonaws.com/weather-data/index.json');
         const data = await response.json();
 
         if (response.ok) {
@@ -263,7 +266,8 @@ function displayHistoricalData(entry) {
 
 // Fetch historical data when the page loads
 fetchHistoricalData();
-\*
+
+*/
 document.addEventListener('DOMContentLoaded', () => {
     const searchForm = document.getElementById('search-form');
     const cityInput = document.getElementById('city-input');
@@ -290,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function fetchWeatherData(city) {
         try {
-            const response = await fetch('https://y8ehuk3u3l.execute-api.us-east-1.amazonaws.com/weather', {
+            const response = await fetch('https://yoursplzzz.execute-api.us-east-1.amazonaws.com/weather', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ city: city })
@@ -312,7 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
         weatherInfo.innerHTML = `
             <div class="weather-card">
                 <h3>${data.city}</h3>
-                <p><i class="fas fa-thermometer-half"></i> ${data.temperature.toFixed(1)}°C</p>
+                <p><i class="fas fa-thermometer-half"></i> ${data.temperature.toFixed(1)}Â°C</p>
                 <p><i class="fas fa-tint"></i> ${data.humidity}%</p>
                 <p><i class="fas fa-cloud"></i> ${data.conditions}</p>
                 <p><i class="fas fa-wind"></i> ${data.wind_speed} m/s</p>
@@ -330,7 +334,7 @@ document.addEventListener('DOMContentLoaded', () => {
         searchChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Temperature (°C)', 'Humidity (%)', 'Wind Speed (m/s)'],
+                labels: ['Temperature (Â°C)', 'Humidity (%)', 'Wind Speed (m/s)'],
                 datasets: [{
                     label: data.city,
                     data: [data.temperature, data.humidity, data.wind_speed],
@@ -380,7 +384,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function fetchAndDisplayHistoricalData() {
         try {
-            const response = await fetch('https://weatherdashboard-bucket-123456789.s3.amazonaws.com/weather-data/index.json', {
+            const response = await fetch('https://yourbucketplzz.s3.amazonaws.com/weather-data/index.json', {
                 mode: 'cors'
             });
 
@@ -395,7 +399,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             for (const entry of data.slice(-5)) { // Display only the last 5 entries
                 try {
-                    const weatherResponse = await fetch(`https://weatherdashboard-bucket-123456789.s3.amazonaws.com/${entry.file_name}`, {
+                    const weatherResponse = await fetch(`https://yourbucketplzz.s3.amazonaws.com/${entry.file_name}`, {
                         mode: 'cors'
                     });
 
@@ -409,7 +413,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     row.innerHTML = `
                         <td>${weatherData.name}</td>
                         <td>${formatTimestamp(entry.timestamp)}</td>
-                        <td>${weatherData.main.temp.toFixed(2)}°C</td>
+                        <td>${weatherData.main.temp.toFixed(2)}Â°C</td>
                     `;
                     historicalTable.appendChild(row);
 
@@ -459,7 +463,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         beginAtZero: false,
                         title: {
                             display: true,
-                            text: 'Temperature (°C)'
+                            text: 'Temperature (Â°C)'
                         }
                     }
                 },
@@ -476,7 +480,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     label += ': ';
                                 }
                                 if (context.parsed.y !== null) {
-                                    label += context.parsed.y.toFixed(2) + '°C';
+                                    label += context.parsed.y.toFixed(2) + 'Â°C';
                                 }
                                 return label;
                             }
